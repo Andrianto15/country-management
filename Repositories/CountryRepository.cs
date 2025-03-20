@@ -14,10 +14,10 @@ namespace CountryManagement.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<IReadOnlyList<Country>> GetCountriesAsync()
-        {
-            return await dbContext.Countries.ToListAsync();
-        }
+        //public async Task<IReadOnlyList<Country>> GetCountriesAsync()
+        //{
+        //    return await dbContext.Countries.ToListAsync();
+        //}
 
         public async Task<Country> GetCountryByIdAsync(Guid id)
         {
@@ -44,6 +44,36 @@ namespace CountryManagement.Repositories
         {
             dbContext.Countries.Remove(country);
             await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IReadOnlyList<Country>> GetCountriesAsync(string? nameFilter, int page, int pageSize)
+        {
+            var query = dbContext.Countries.AsQueryable();
+
+            // Filter by Name
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                query = query.Where(c => c.CountryName.Contains(nameFilter));
+            }
+
+            // Paging
+            return await query
+                .OrderBy(c => c.CountryName)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalCountriesAsync(string? nameFilter)
+        {
+            var query = dbContext.Countries.AsQueryable();
+
+            if (!string.IsNullOrEmpty(nameFilter))
+            {
+                query = query.Where(c => c.CountryName.Contains(nameFilter));
+            }
+
+            return await query.CountAsync();
         }
     }
 }

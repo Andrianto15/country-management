@@ -20,11 +20,18 @@ namespace CountryManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCountries()
+        //public async Task<IActionResult> GetAllCountries()
+        //{
+        //    logger.LogInformation("Request In. Fetching all countries");
+
+        //    return Ok(await countryService.GetCountriesAsync());
+        //}
+        public async Task<IActionResult> GetAllCountries([FromQuery] string? nameFilter, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             logger.LogInformation("Request In. Fetching all countries");
 
-            return Ok(await countryService.GetCountriesAsync());
+            var result = await countryService.GetCountriesAsync(nameFilter, page, pageSize);
+            return Ok(result);
         }
 
         [HttpGet]

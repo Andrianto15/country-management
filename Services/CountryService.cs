@@ -16,13 +16,32 @@ namespace CountryManagement.Services
             this.logger = logger;
         }
 
-        public async Task<IReadOnlyList<ListCountryDto>> GetCountriesAsync()
+        //public async Task<IReadOnlyList<ListCountryDto>> GetCountriesAsync()
+        //{
+        //    var countries = await countryRepository.GetCountriesAsync();
+
+        //    logger.LogInformation("Fetching all countries from database.");
+
+        //    return countries.Select(c => new ListCountryDto { CountryCode = c.CountryCode, CountryName = c.CountryName }).ToList();
+        //}
+        public async Task<PagedResult<List<ListCountryDto>>> GetCountriesAsync(string? nameFilter, int page, int pageSize)
         {
-            var countries = await countryRepository.GetCountriesAsync();
+            var countries = await countryRepository.GetCountriesAsync(nameFilter, page, pageSize);
+            var totalRecords = await countryRepository.GetTotalCountriesAsync(nameFilter);
 
-            logger.LogInformation("Fetching all countries from database.");
+            var result = new PagedResult<List<ListCountryDto>>
+            {
+                Data = countries.Select(c => new ListCountryDto
+                {
+                    CountryCode = c.CountryCode,
+                    CountryName = c.CountryName
+                }).ToList(),
+                TotalRecords = totalRecords,
+                Page = page,
+                PageSize = pageSize
+            };
 
-            return countries.Select(c => new ListCountryDto { CountryCode = c.CountryCode, CountryName = c.CountryName }).ToList();
+            return result;
         }
 
         public async Task<Country?> GetCountryByIdAsync(Guid id)
