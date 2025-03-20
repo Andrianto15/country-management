@@ -1,0 +1,47 @@
+# Visual Studio specific
+.vs/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# NuGet packages
+packages/
+*.nupkg
+
+# ASP.NET temporary files
+App_Data/
+App_Offline.htm
+
+# Logs and debug files
+logs/
+*.log
+
+# Rider and JetBrains specific
+.idea/
+*.sln.iml
+
+# Resharper and DotCover
+*.DotSettings.user
+*.ReSharper
+*.DotCover
+
+# Entity Framework migrations
+Migrations/
+
+# Publish output
+wwwroot/
+publish/
+
+# Other OS-specific files
+Thumbs.db
+.DS_Store
+
+# Local environment settings
+.env
